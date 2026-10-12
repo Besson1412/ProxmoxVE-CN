@@ -52,7 +52,7 @@ update_deb_based() {
   if docker ps -a --format '{{.Image}}' | grep -q '^portainer/portainer-ce:latest$'; then
     msg_warn "Portainer is now managed by a dedicated addon script and is no longer updated here."
     echo -e "${TAB}Update/migrate it with:"
-    echo -e "${TAB}${TAB}${GN}bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/addon/portainer.sh)\"${CL}"
+    echo -e "${TAB}${TAB}${GN}bash -c \"\$(curl -fsSL https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/tools/addon/portainer.sh)\"${CL}"
   fi
 
   msg_ok "Updated successfully!"

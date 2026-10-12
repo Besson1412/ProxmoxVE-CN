@@ -6182,7 +6182,7 @@ _add_debian_nonfree() {
   bullseye)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bullseye bullseye-updates
 Components: non-free
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -6191,7 +6191,7 @@ EOF
   bookworm)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bookworm bookworm-updates
 Components: non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -6200,13 +6200,13 @@ EOF
   trixie | sid)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie trixie-updates
 Components: non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: trixie-security
 Components: non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -6229,13 +6229,13 @@ _add_debian_nonfree_firmware() {
     # Debian 11 uses 'non-free' component (no separate non-free-firmware)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free-firmware.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bullseye bullseye-updates
 Components: non-free
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: bullseye-security
 Components: non-free
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -6244,13 +6244,13 @@ EOF
   bookworm)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free-firmware.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bookworm bookworm-updates
 Components: non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: bookworm-security
 Components: non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -6259,13 +6259,13 @@ EOF
   trixie | sid)
     cat <<'EOF' >/etc/apt/sources.list.d/non-free-firmware.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie trixie-updates
 Components: non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: trixie-security
 Components: non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -9497,12 +9497,12 @@ setup_nonfree() {
   if [ ! -f "$sources_file" ]; then
     cat <<EOF >$sources_file
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie trixie-updates
 Components: main contrib non-free non-free-firmware
 
 Types: deb
-URIs: http://security.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: trixie-security
 Components: main contrib non-free non-free-firmware
 EOF

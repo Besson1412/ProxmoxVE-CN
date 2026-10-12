@@ -33,7 +33,7 @@ msg_ok() { echo -e "${BFR} ${CM} ${GN}$1${CL}"; }
 msg_error() { echo -e "${BFR} ${CROSS} ${RD}$1${CL}"; }
 
 # Telemetry
-source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
+source <(curl -fsSL --connect-timeout 2 "${COMMUNITY_SCRIPTS_CORE_URL:-https://ghproxy.net/https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
 declare -f init_tool_telemetry &>/dev/null && init_tool_telemetry "post-pbs-install" "pve"
 
 # ---- helpers ----
@@ -133,9 +133,9 @@ start_routines_3() {
   yes)
     msg_info "Correcting Debian Sources"
     cat <<EOF >/etc/apt/sources.list
-deb https://deb.debian.org/debian ${VERSION} main contrib
-deb https://deb.debian.org/debian ${VERSION}-updates main contrib
-deb https://security.debian.org/debian-security ${VERSION}-security main contrib
+deb https://mirrors.ustc.edu.cn/debian ${VERSION} main contrib
+deb https://mirrors.ustc.edu.cn/debian ${VERSION}-updates main contrib
+deb https://mirrors.ustc.edu.cn/debian-security ${VERSION}-security main contrib
 EOF
     msg_ok "Corrected Debian Sources"
     ;;
@@ -206,13 +206,13 @@ start_routines_4() {
     fi
     cat >/etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
-URIs: http://deb.debian.org/debian/
+URIs: https://mirrors.ustc.edu.cn/debian/
 Suites: trixie trixie-updates
 Components: main contrib non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://security.debian.org/debian-security/
+URIs: https://mirrors.ustc.edu.cn/debian-security/
 Suites: trixie-security
 Components: main contrib non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
