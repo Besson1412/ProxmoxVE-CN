@@ -33,7 +33,7 @@ msg_ok() { echo -e "${BFR} ${CM} ${GN}$1${CL}"; }
 msg_error() { echo -e "${BFR} ${CROSS} ${RD}$1${CL}"; }
 
 # Telemetry
-source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
+source <(curl -fsSL --connect-timeout 2 "${COMMUNITY_SCRIPTS_CORE_URL:-https://ghproxy.net/https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
 declare -f init_tool_telemetry &>/dev/null && init_tool_telemetry "pbs4-upgrade" "pve"
 
 start_routines() {
@@ -75,19 +75,19 @@ start_routines() {
     fi
     cat >/etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://security.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: trixie-security
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie-updates
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

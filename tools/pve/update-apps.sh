@@ -159,7 +159,7 @@ function script_exists() {
   local name="$1"
   sanitize_service_name "$name" || return 1
   curl -fsSL --max-time 10 -o /dev/null \
-    "https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/${name}.sh" 2>/dev/null
+    "https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/ct/${name}.sh" 2>/dev/null
 }
 
 # A container keeps the slug it was built with, so a renamed ct/ script leaves it
@@ -538,7 +538,7 @@ for container in $CHOICE; do
   log_write "Container $container: detected service '${service}'"
 
   #2) Extract service build/update resource requirements from config/installation file
-  script=$(curl -fsSL "https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/${service}.sh")
+  script=$(curl -fsSL "https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/ct/${service}.sh")
 
   #2.1) Check if the script downloaded successfully
   if [ $? -ne 0 ] || [ -z "${script}" ]; then

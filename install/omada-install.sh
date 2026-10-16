@@ -36,7 +36,7 @@ if ! dpkg -l | grep -q 'libssl1.1'; then
   LIBSSL_URL=""
   LIBSSL_DEB=""
   for POOL in \
-    "https://security.debian.org/debian-security/pool/updates/main/o/openssl" \
+    "https://mirrors.ustc.edu.cn/debian-security/pool/updates/main/o/openssl" \
     "https://archive.debian.org/debian-security/pool/updates/main/o/openssl" \
     "https://archive.debian.org/debian/pool/main/o/openssl"; do
     FOUND=$(curl -fsSL "$POOL/" | grep -oE "libssl1\.1_[^\"<>]+_${LIBSSL_ARCH}\.deb" | sort -V | tail -n1 || true)

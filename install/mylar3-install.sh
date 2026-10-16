@@ -16,7 +16,7 @@ update_os
 msg_info "Installing Dependencies"
 cat <<EOF >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie
 Components: non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
