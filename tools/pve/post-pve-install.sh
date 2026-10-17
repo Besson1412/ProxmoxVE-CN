@@ -45,7 +45,7 @@ msg_error() {
 }
 
 # Telemetry
-source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
+source <(curl -fsSL --connect-timeout 2 "${COMMUNITY_SCRIPTS_CORE_URL:-https://ghproxy.net/https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
 declare -f init_tool_telemetry &>/dev/null && init_tool_telemetry "post-pve-install" "pve"
 
 get_pve_version() {
@@ -122,9 +122,9 @@ start_routines_8() {
   yes)
     msg_info "Correcting Proxmox VE Sources"
     cat <<EOF >/etc/apt/sources.list
-deb https://deb.debian.org/debian bookworm main contrib
-deb https://deb.debian.org/debian bookworm-updates main contrib
-deb https://security.debian.org/debian-security bookworm-security main contrib
+deb https://mirrors.ustc.edu.cn/debian bookworm main contrib
+deb https://mirrors.ustc.edu.cn/debian bookworm-updates main contrib
+deb https://mirrors.ustc.edu.cn/debian-security bookworm-security main contrib
 EOF
     echo 'APT::Get::Update::SourceListWarnings::NonFreeFirmware "false";' >/etc/apt/apt.conf.d/no-bookworm-firmware.conf
     msg_ok "Corrected Proxmox VE Sources"
@@ -139,7 +139,7 @@ EOF
   yes)
     msg_info "Disabling 'pve-enterprise' repository"
     cat <<EOF >/etc/apt/sources.list.d/pve-enterprise.list
-# deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/pve bookworm pve-enterprise
 EOF
     msg_ok "Disabled 'pve-enterprise' repository"
     ;;
@@ -153,7 +153,7 @@ EOF
   yes)
     msg_info "Enabling 'pve-no-subscription' repository"
     cat <<EOF >/etc/apt/sources.list.d/pve-install-repo.list
-deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
+deb https://mirrors.ustc.edu.cn/proxmox/debian/pve bookworm pve-no-subscription
 EOF
     msg_ok "Enabled 'pve-no-subscription' repository"
     ;;
@@ -167,10 +167,10 @@ EOF
   yes)
     msg_info "Correcting 'ceph package repositories'"
     cat <<EOF >/etc/apt/sources.list.d/ceph.list
-# deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise
-# deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription
-# deb https://enterprise.proxmox.com/debian/ceph-reef bookworm enterprise
-# deb http://download.proxmox.com/debian/ceph-reef bookworm no-subscription
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/ceph-quincy bookworm enterprise
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/ceph-quincy bookworm no-subscription
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/ceph-reef bookworm enterprise
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/ceph-reef bookworm no-subscription
 EOF
     msg_ok "Corrected 'ceph package repositories'"
     ;;
@@ -184,7 +184,7 @@ EOF
   yes)
     msg_info "Adding 'pvetest' repository and set disabled"
     cat <<EOF >/etc/apt/sources.list.d/pvetest-for-beta.list
-# deb http://download.proxmox.com/debian/pve bookworm pvetest
+# deb https://mirrors.ustc.edu.cn/proxmox/debian/pve bookworm pvetest
 EOF
     msg_ok "Added 'pvetest' repository"
     ;;
@@ -266,19 +266,19 @@ start_routines_9() {
       # Create new deb822 sources
       cat >/etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://security.debian.org/debian-security
+URIs: https://mirrors.ustc.edu.cn/debian-security
 Suites: trixie-security
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie-updates
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
@@ -339,7 +339,7 @@ EOF
       msg_info "Adding 'pve-enterprise' repository (deb822)"
       cat >/etc/apt/sources.list.d/pve-enterprise.sources <<EOF
 Types: deb
-URIs: https://enterprise.proxmox.com/debian/pve
+URIs: https://mirrors.ustc.edu.cn/proxmox/debian/pve
 Suites: trixie
 Components: pve-enterprise
 Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
@@ -462,7 +462,7 @@ EOF
       msg_info "Adding 'pve-no-subscription' repository (deb822)"
       cat >/etc/apt/sources.list.d/proxmox.sources <<EOF
 Types: deb
-URIs: http://download.proxmox.com/debian/pve
+URIs: https://mirrors.ustc.edu.cn/proxmox/debian/pve
 Suites: trixie
 Components: pve-no-subscription
 Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
@@ -492,7 +492,7 @@ EOF
       msg_info "Adding 'ceph package repositories' (deb822)"
       cat >/etc/apt/sources.list.d/ceph.sources <<EOF
 Types: deb
-URIs: http://download.proxmox.com/debian/${CEPH_RELEASE}
+URIs: https://mirrors.ustc.edu.cn/proxmox/debian/${CEPH_RELEASE}
 Suites: trixie
 Components: no-subscription
 Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
@@ -531,7 +531,7 @@ EOF
       msg_info "Adding 'pve-test' repository (deb822, disabled)"
       cat >/etc/apt/sources.list.d/pve-test.sources <<EOF
 Types: deb
-URIs: http://download.proxmox.com/debian/pve
+URIs: https://mirrors.ustc.edu.cn/proxmox/debian/pve
 Suites: trixie
 Components: pve-test
 Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
@@ -660,6 +660,23 @@ EOF
     no) msg_error "Selected no to Disabling high availability" ;;
     esac
   fi
+
+    CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "LXC TEMPLATE MIRROR" --menu "Change Proxmox LXC Container Template download URL to USTC mirror?\n \nSpeed up downloading container templates (Ubuntu/Debian/Alpine) in China." 14 58 2 \
+    "yes" " " \
+    "no" " " 3>&2 2>&1 1>&3)
+  case $CHOICE in
+  yes)
+    msg_info "Updating LXC Template Download Mirror"
+    if [ -f /usr/share/perl5/PVE/APLInfo.pm ]; then
+      sed -i.bak 's#http://download.proxmox.com/images#https://mirrors.ustc.edu.cn/proxmox/images#' /usr/share/perl5/PVE/APLInfo.pm
+      systemctl restart pvedaemon.service || true
+      msg_ok "Updated LXC Template Download Mirror to USTC"
+    else
+      msg_error "APLInfo.pm not found"
+    fi
+    ;;
+  no) msg_error "Selected no to Updating LXC Template Mirror" ;;
+  esac
 
   CHOICE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --title "UPDATE" --menu "\nUpdate Proxmox VE now?" 11 58 2 \
     "yes" " " \

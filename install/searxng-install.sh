@@ -16,7 +16,7 @@ update_os
 msg_info "Installing SearXNG dependencies"
 cat <<EOF >/etc/apt/sources.list.d/backports.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie-backports
 Components: main
 EOF

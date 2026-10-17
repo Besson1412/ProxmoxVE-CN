@@ -21,7 +21,7 @@ variables
 color
 catch_errors
 
-ADDON_SCRIPT="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/addon/komodo.sh"
+ADDON_SCRIPT="https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/tools/addon/komodo.sh"
 
 function update_script() {
   if [[ ! -d /opt/komodo ]]; then
@@ -54,7 +54,7 @@ function update_script() {
   msg_info "Migrating update function"
   TMP_UPDATE=$(mktemp)
   cat <<'MIGRATION_EOF' >"$TMP_UPDATE"
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/addon/komodo.sh)"
+bash -c "$(curl -fsSL https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/tools/addon/komodo.sh)"
 MIGRATION_EOF
   mv "$TMP_UPDATE" /usr/bin/update
   chmod +x /usr/bin/update

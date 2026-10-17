@@ -16,7 +16,7 @@ update_os
 setup_deb822_repo \
   "backports" \
   "https://ftp-master.debian.org/keys/archive-key-13.asc" \
-  "http://deb.debian.org/debian" \
+  "https://mirrors.ustc.edu.cn/debian" \
   "trixie-backports" \
   "main"
 
