@@ -1,225 +1,70 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png" height="112px" alt="Proxmox VE Helper-Scripts Logo" />
+# Proxmox VE 社区助手脚本国内优化镜像
 
-  <h1>Proxmox VE Helper-Scripts</h1>
-  <p><strong>One-command installations for services, containers, and VMs on Proxmox VE</strong><br/>
-  A community project — built on the foundation of <a href="https://github.com/tteck">@tteck</a>'s original work</p>
+本项目为 [community-scripts/ProxmoxVE](https://github.com/community-scripts/ProxmoxVE) 的国内加速镜像与本地化增强版本。
 
-  <p>
-    <a href="https://community-scripts.org"><img src="https://img.shields.io/badge/Website-community--scripts.org-4c9b3f?style=flat-square" /></a>
-    <a href="https://discord.gg/3AnUqsXnmK"><img src="https://img.shields.io/badge/Discord-Join_us-7289da?style=flat-square&logo=discord&logoColor=white" /></a>
-    <a href="https://github.com/community-scripts/ProxmoxVE/stargazers"><img src="https://img.shields.io/github/stars/community-scripts/ProxmoxVE?style=flat-square&label=Stars&color=f5a623" /></a>
-    <a href="https://github.com/community-scripts/ProxmoxVE/blob/main/CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-view-6c5ce7?style=flat-square" /></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" /></a>
-  </p>
-</div>
+每日通过 GitHub Actions 自动与上游保持同步更新，并自动化将官方源替换为国内中科大 (USTC) 高速镜像，同步推送到国内 GitCode 平台，让国内 Proxmox VE 节点能够极速、顺畅地执行一键配置与安装脚本。
 
 ---
 
-## What is this?
+## 🚀 极速一键使用
 
-**Simplify your Proxmox VE setup with community-driven automation scripts.**
+在刚安装完成的 Proxmox VE 节点的 Shell（SSH 终端或网页 Console）中直接复制执行以下命令：
 
-Install and configure popular self-hosted services with a single command — no manual package hunting, no config file archaeology. Paste a command into your Proxmox shell, answer a few prompts, and your container or VM is up and running.
+### 推荐：GitCode 国内直连源（无需任何网络代理）
+```bash
+bash -c "$(curl -fsSL 'https://api.gitcode.com/api/v5/repos/Besson1412/ProxmoxVE-CN/raw/tools/pve/post-pve-install.sh?ref=main')"
+```
 
-The collection covers hundreds of services across categories like home automation, media servers, networking tools, databases, monitoring stacks, and more.
-
----
-
-## Requirements
-
-| Component      | Details                                          |
-| -------------- | ------------------------------------------------ |
-| **Proxmox VE** | Version 8.4, 9.0, 9.1, or 9.2                    |
-| **Host OS**    | Proxmox VE (Debian-based)                        |
-| **Access**     | Root shell access on the Proxmox host            |
-| **Network**    | Internet connection required during installation |
+### 备选：GitHub 加速代理通道
+```bash
+bash -c "$(curl -fsSL https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/tools/pve/post-pve-install.sh)"
+```
 
 ---
 
-## Getting Started
+## ⚡ 本地化核心改造
 
-The fastest way to find and run scripts:
+1. **Debian APT 基础源加速**
+   - 适配 PVE 8 (Debian 12 Bookworm) 与 PVE 9 (Debian 13 Trixie deb822 `.sources` 格式)。
+   - 自动切换为中国科学技术大学 (USTC) 镜像：`mirrors.ustc.edu.cn/debian` 与 `debian-security`。
 
-1. Go to **[community-scripts.org](https://community-scripts.org)**
-2. Search for the service you want (e.g. "Home Assistant", "Nginx Proxy Manager", "Jellyfin")
-3. Copy the one-line install command from the script page
-4. Open your **Proxmox Shell** and paste it
-5. Choose between **Default** or **Advanced** setup and follow the prompts
+2. **Proxmox VE 软件源加速**
+   - 自动禁用需要付费订阅的 `pve-enterprise` 企业源。
+   - 自动开启并替换 `pve-no-subscription` 社区非订阅源为国内高速镜像。
 
-Each script page documents what the container includes, default resource allocation, and post-install notes.
+3. **Ceph 存储组件源优化**
+   - 包含 Ceph Quincy、Reef 等各版本组件源替换为 USTC 镜像。
 
----
+4. **LXC / CT 容器模板下载加速（独家增强）**
+   - 脚本集成 CT 模板下载源切换功能，可一键将 `/usr/share/perl5/PVE/APLInfo.pm` 中的模板下载地址切换为中科大源。
+   - 彻底解决在 Proxmox VE 网页控制台下载 Debian、Ubuntu、Alpine 等容器系统模板极度缓慢的问题。
 
-## How Scripts Work
-
-Every script follows the same pattern:
-
-**Default mode** — Picks sensible resource defaults (CPU, RAM, storage) and asks only the minimum required questions. Most installs finish in under five minutes.
-
-**Advanced mode** — Gives you full control over container settings, networking, storage backends, and application-level configuration before anything is installed.
-
-After installation, each container ships with a **post-install helper** accessible from the Proxmox shell. It handles common tasks like:
-
-- Applying updates to the installed service
-- Changing application settings without manually editing config files
-- Basic troubleshooting and log access
+5. **网络防卡顿优化**
+   - 针对国内网络环境下无法访问 `raw.githubusercontent.com` 的情况，对脚本中内置的 Telemetry 及远程依赖调用添加短超时保护，防止脚本启动时无响应等待 30 秒。
 
 ---
 
-## What's Included
+## 🔄 自动化同步与维护架构
 
-The repository covers a wide range of categories. A few examples:
+```text
+[上游社区仓库] community-scripts/ProxmoxVE
+       │ 每日定时拉取 (GitHub Actions)
+       ▼
+[GitHub] Besson1412/ProxmoxVE-CN
+  ├─ upstream 分支: 纯净保留上游原始代码，永不修改
+  ├─ scripts/patch_cn.py: 自动化源替换与逻辑增强脚本
+  └─ main 分支: 经过自动化流水线转换后的国内专属分支
+       │
+       ├─► 自动同步推送到国内 GitCode 仓库 (Besson1412/ProxmoxVE-CN)
+       └─► 国内服务器无缝高速拉取执行
+```
 
-| Category        | Examples                                            |
-| --------------- | --------------------------------------------------- |
-| Home Automation | Home Assistant, Zigbee2MQTT, ESPHome, Node-RED      |
-| Media           | Jellyfin, Plex, Radarr, Sonarr, Immich              |
-| Networking      | AdGuard Home, Nginx Proxy Manager, Pi-hole, Traefik |
-| Monitoring      | Grafana, Prometheus, Uptime Kuma, Netdata           |
-| Databases       | PostgreSQL, MariaDB, Redis, InfluxDB                |
-| Security        | Vaultwarden, CrowdSec, Authentik                    |
-| Dev & Tools     | Gitea, Portainer, VS Code Server, n8n               |
-
-> Browse the full list at **[community-scripts.org/categories](https://community-scripts.org/categories)** — new scripts are added regularly.
-
----
-
-## Contributing
-
-This project runs on community contributions. Whether you want to write new scripts, improve existing ones, or just report a bug — every bit helps.
-
-### Where to start
-
-| I want to…                            | Go here                                                                                           |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Add a **new** script                  | [DevScripts](https://github.com/community-scripts/DevScripts) — new scripts are tested here first |
-| Fix or improve an **existing** script | [Contributing Guidelines](CONTRIBUTING.md) — open a PR in this repo                               |
-| Report a bug or broken script         | [Issues](https://github.com/community-scripts/ProxmoxVE/issues)                                   |
-| Request a new script or feature       | [Discussions](https://github.com/community-scripts/ProxmoxVE/discussions)                         |
-| Report a security vulnerability       | [Security Policy](SECURITY.md)                                                                    |
-| Get help or chat with other users     | [Discord](https://discord.gg/3AnUqsXnmK)                                                          |
-
-### Before you open a PR
-
-- **New scripts go to [DevScripts](https://github.com/community-scripts/DevScripts), not here.** PRs with new scripts opened directly against this repo will be closed.
-- Bug fixes and improvements to existing scripts belong in this repo — read the [Contributing Guidelines](CONTRIBUTING.md) first.
-- Keep PRs focused. One fix or feature per PR.
-- Document what your script installs and any non-obvious decisions in the corresponding JSON metadata file.
+### 手动触发同步
+在 GitHub 仓库页面进入 **Actions** -> 选择 **Sync Upstream and Patch CN** -> 点击 **Run workflow** 即可随时手动触发全量同步。
 
 ---
 
-## Core Team
+## 📜 许可证与致谢
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <a href="https://github.com/MickLesk">
-        <img src="https://github.com/MickLesk.png" width="80" height="80" style="border-radius:50%" alt="MickLesk" /><br/>
-        <sub><b>MickLesk</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/michelroegl-brunner">
-        <img src="https://github.com/michelroegl-brunner.png" width="80" height="80" style="border-radius:50%" alt="michelroegl-brunner" /><br/>
-        <sub><b>michelroegl-brunner</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/BramSuurdje">
-        <img src="https://github.com/BramSuurdje.png" width="80" height="80" style="border-radius:50%" alt="BramSuurdje" /><br/>
-        <sub><b>BramSuurdje</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/CrazyWolf13">
-        <img src="https://github.com/CrazyWolf13.png" width="80" height="80" style="border-radius:50%" alt="CrazyWolf13" /><br/>
-        <sub><b>CrazyWolf13</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/tremor021">
-        <img src="https://github.com/tremor021.png" width="80" height="80" style="border-radius:50%" alt="tremor021" /><br/>
-        <sub><b>tremor021</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/vhsdream">
-        <img src="https://github.com/vhsdream.png" width="80" height="80" style="border-radius:50%" alt="vhsdream" /><br/>
-        <sub><b>vhsdream</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/asylumexp">
-        <img src="https://github.com/asylumexp.png" width="80" height="80" style="border-radius:50%" alt="asylumexp" /><br/>
-        <sub><b>asylumexp</b></sub>
-      </a>
-    </td>
-  </tr>
-</table>
-
----
-
-## Project Activity
-
-<p align="center">
-  <img
-    src="https://repobeats.axiom.co/api/embed/57edde03e00f88d739bdb5b844ff7d07dd079375.svg"
-    alt="Repository activity"
-    width="700"
-  />
-</p>
-
-<p align="center">
-  <a href="https://www.star-history.com/?repos=community-scripts%2FProxmoxVE&type=date&legend=top-left">
-    <picture>
-      <source
-        media="(prefers-color-scheme: dark)"
-        srcset="https://api.star-history.com/chart?repos=community-scripts/ProxmoxVE&type=date&theme=dark&legend=top-left&sealed_token=-lUy2KH6pJryUyLCbiWRwFz3ilXMDFVFHm0lJcqh-Hl5e0QNNKjINNcXzULhaZVpBugN_TDaxOawEAuzwBc5Sjqa2mCRw9K6TdCioKRDsS_qXUwhkLQSCMRSg1schCdl4rQD8qEj7PWBjin-fyHnDm7NnM6akZp59jndG7qV7PrvG8nLBgDIuuA-wAI3"
-      />
-      <source
-        media="(prefers-color-scheme: light)"
-        srcset="https://api.star-history.com/chart?repos=community-scripts/ProxmoxVE&type=date&legend=top-left&sealed_token=-lUy2KH6pJryUyLCbiWRwFz3ilXMDFVFHm0lJcqh-Hl5e0QNNKjINNcXzULhaZVpBugN_TDaxOawEAuzwBc5Sjqa2mCRw9K6TdCioKRDsS_qXUwhkLQSCMRSg1schCdl4rQD8qEj7PWBjin-fyHnDm7NnM6akZp59jndG7qV7PrvG8nLBgDIuuA-wAI3"
-      />
-      <img
-        alt="Star History Chart"
-        src="https://api.star-history.com/chart?repos=community-scripts/ProxmoxVE&type=date&legend=top-left&sealed_token=-lUy2KH6pJryUyLCbiWRwFz3ilXMDFVFHm0lJcqh-Hl5e0QNNKjINNcXzULhaZVpBugN_TDaxOawEAuzwBc5Sjqa2mCRw9K6TdCioKRDsS_qXUwhkLQSCMRSg1schCdl4rQD8qEj7PWBjin-fyHnDm7NnM6akZp59jndG7qV7PrvG8nLBgDIuuA-wAI3"
-        width="700"
-      />
-    </picture>
-  </a>
-</p>
-
----
-
-## Support the Project
-
-This project is maintained by volunteers. All infrastructure costs come out of pocket, and the work is done in people's spare time.
-
-**30% of all donations are forwarded directly to cancer research and hospice care** — a cause that was important to tteck.
-
-<div align="center">
-  <a href="https://ko-fi.com/community_scripts">
-    <img src="https://img.shields.io/badge/Support_on_Ko--fi-FF5F5F?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Support on Ko-fi" />
-  </a>
-  &nbsp;
-  <a href="https://community-scripts.org/donate">
-    <img src="https://img.shields.io/badge/Donate-community--scripts.org%2Fdonate-4c9b3f?style=for-the-badge" alt="Donate via community-scripts.org" />
-  </a>
-</div>
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE) — free to use, modify, and redistribute for personal and commercial purposes.
-
-See the full license text in [LICENSE](LICENSE).
-
----
-
-<div align="center">
-  <sub>Built on the foundation of <a href="https://github.com/tteck">tteck</a>'s original work · <a href="https://github.com/tteck/Proxmox">Original Repository</a></sub><br/>
-  <sub>Maintained and expanded by the community · In memory of tteck</sub><br/>
-  <sub><i>Proxmox® is a registered trademark of <a href="https://www.proxmox.com/en/about/company">Proxmox Server Solutions GmbH</a></i></sub>
-</div>
+- 原始脚本版权归 [community-scripts](https://github.com/community-scripts/ProxmoxVE) 及其贡献者所有，遵循 MIT 许可证。
+- 感谢 [中国科学技术大学开源镜像站](https://mirrors.ustc.edu.cn/) 提供稳定的高速源支持。

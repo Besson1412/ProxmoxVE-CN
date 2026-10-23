@@ -21,7 +21,7 @@ $STD apt install -y \
 
 cat <<EOF >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: https://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: trixie
 Components: non-free non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
