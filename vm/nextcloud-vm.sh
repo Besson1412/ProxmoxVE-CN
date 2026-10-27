@@ -4,7 +4,7 @@
 # License: MIT
 # https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 
-COMMUNITY_SCRIPTS_URL="${COMMUNITY_SCRIPTS_URL:-https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main}"
+COMMUNITY_SCRIPTS_URL="${COMMUNITY_SCRIPTS_URL:-https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main}"
 source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/pve/vm-core.func")
 load_functions
 

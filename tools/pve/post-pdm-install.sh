@@ -44,7 +44,7 @@ msg_error() {
 }
 
 # Telemetry
-source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
+source <(curl -fsSL --connect-timeout 2 "${COMMUNITY_SCRIPTS_CORE_URL:-https://ghproxy.net/https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
 declare -f init_tool_telemetry &>/dev/null && init_tool_telemetry "post-pdm-install" "pve"
 
 if ! dpkg -s proxmox-datacenter-manager >/dev/null 2>&1; then
@@ -116,13 +116,13 @@ start_routines() {
     msg_info "Correcting Debian Sources"
     cat <<EOF >/etc/apt/sources.list.d/debian.sources
 Types: deb
-URIs: http://deb.debian.org/debian/
+URIs: https://mirrors.ustc.edu.cn/debian/
 Suites: ${VERSION} ${VERSION}-updates
 Components: main contrib non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://security.debian.org/debian-security/
+URIs: https://mirrors.ustc.edu.cn/debian-security/
 Suites: ${VERSION}-security
 Components: main contrib non-free-firmware
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

@@ -18,7 +18,7 @@ fi
 source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/core.func")
 source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/lib/tools.func")
 source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/core/error_handler.func")
-source <(curl -fsSL "${COMMUNITY_SCRIPTS_CORE_URL:-https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
+source <(curl -fsSL --connect-timeout 2 "${COMMUNITY_SCRIPTS_CORE_URL:-https://ghproxy.net/https://raw.githubusercontent.com/community-scripts/core/main}/api/api.func") 2>/dev/null || true
 declare -f init_tool_telemetry &>/dev/null && init_tool_telemetry "coder-code-server" "addon"
 
 # Enable error handling
@@ -105,7 +105,7 @@ EOF
   cat <<'EOF' >/usr/local/bin/update_coder-code-server
 #!/usr/bin/env bash
 # Coder Code Server Update Script
-type=update bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/addon/coder-code-server.sh)"
+type=update bash -c "$(curl -fsSL https://ghproxy.net/https://raw.githubusercontent.com/Besson1412/ProxmoxVE-CN/main/tools/addon/coder-code-server.sh)"
 EOF
   chmod +x /usr/local/bin/update_coder-code-server
   msg_ok "Created update script (/usr/local/bin/update_coder-code-server)"

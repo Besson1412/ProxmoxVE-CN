@@ -1,0 +1,73 @@
+name: Sync Upstream, Patch CN, and Push to GitCode
+
+on:
+  schedule:
+    # 每天北京时间凌晨 03:00 (UTC 19:00) 自动执行
+    - cron: '0 19 * * *'
+  workflow_dispatch: # 支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch Upstream
+        run: |
+          git remote add upstream https://github.com/community-scripts/ProxmoxVE.git || git remote set-url upstream https://github.com/community-scripts/ProxmoxVE.git
+          git fetch upstream main
+
+      - name: Update Upstream Tracking Branch
+        run: |
+          git branch -f upstream upstream/main
+          git push origin upstream --force
+
+      - name: Preserve Custom Files
+        run: |
+          mkdir -p /tmp/pve-custom
+          cp -r scripts/patch_cn.py /tmp/pve-custom/
+          cp -r .github/workflows/sync-upstream.yml /tmp/pve-custom/
+          cp -r README.md /tmp/pve-custom/
+
+      - name: Reset to Upstream Main
+        run: |
+          git checkout -B main upstream/main
+
+      - name: Restore Custom Files & Apply Patches
+        run: |
+          mkdir -p scripts .github/workflows
+          cp /tmp/pve-custom/patch_cn.py scripts/
+          cp /tmp/pve-custom/sync-upstream.yml .github/workflows/
+          cp /tmp/pve-custom/README.md ./
+          python3 scripts/patch_cn.py
+
+      - name: Commit and Push to GitHub (main)
+        run: |
+          git add -A
+          UPSTREAM_HASH=$(git rev-parse --short upstream/main)
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(sync): sync upstream community-scripts (${UPSTREAM_HASH}) and apply CN patches"
+            git push origin main --force
+          fi
+
+      - name: Push to GitCode
+        if: env.GITCODE_TOKEN != ''
+        env:
+          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
+        run: |
+          echo "Pushing main branch to GitCode..."
+          git -c http.https://gitcode.com.proxy="" push https://Besson1412:${GITCODE_TOKEN}@gitcode.com/Besson1412/ProxmoxVE-CN.git main:main --force

@@ -18,7 +18,7 @@ msg_info "Installing Cockpit"
 CODENAME=$(get_os_info codename)
 cat <<EOF >/etc/apt/sources.list.d/debian-backports.sources
 Types: deb deb-src
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: ${CODENAME}-backports
 Components: main
 Enabled: yes

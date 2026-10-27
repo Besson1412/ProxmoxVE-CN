@@ -23,13 +23,13 @@ msg_info "Converting APT sources to DEB822 format"
 if [ -f /etc/apt/sources.list ]; then
   cat >/etc/apt/sources.list.d/debian.sources <<'EOF'
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bookworm
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: bookworm-updates
 Components: main contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

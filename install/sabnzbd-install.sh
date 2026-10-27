@@ -24,7 +24,7 @@ PYTHON_VERSION="3.13" setup_uv
 msg_info "Setup Unrar"
 cat <<EOF >/etc/apt/sources.list.d/non-free.sources
 Types: deb
-URIs: http://deb.debian.org/debian/
+URIs: https://mirrors.ustc.edu.cn/debian/
 Suites: trixie
 Components: non-free 
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

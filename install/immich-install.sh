@@ -139,7 +139,7 @@ if [[ -f /etc/apt/sources.list.d/debian.sources ]]; then
 else
   cat <<EOF >/etc/apt/sources.list.d/testing.sources
 Types: deb
-URIs: http://deb.debian.org/debian
+URIs: https://mirrors.ustc.edu.cn/debian
 Suites: testing
 Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
